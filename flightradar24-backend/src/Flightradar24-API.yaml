@@ -1,0 +1,2295 @@
+openapi: 3.1.0
+externalDocs:
+  description: Flightradar24 API Documentation
+  url: https://fr24api.flightradar24.com
+info:
+  title: Flightradar24 API endpoints
+  version: v1
+servers:
+  - url: https://fr24api.flightradar24.com
+    description: Production server
+paths:
+  '/api/static/airlines/{icao}/light':
+    parameters:
+      - $ref: '#/components/parameters/AcceptVersion'
+      - schema:
+          type: string
+        name: icao
+        in: path
+        description: Airline ICAO code.
+        required: true
+        examples:
+          code:
+            value: SAS
+          code2:
+            value: DLH
+          code3:
+            value: THY
+    get:
+      x-codeSamples:
+        - lang: 'bash'
+          label: 'CLI'
+          source: |
+            curl --location 'https://fr24api.flightradar24.com/api/static/airlines/afl/light' \
+            --header 'Accept: application/json' \
+            --header 'Accept-Version: v1' \
+            --header 'Authorization: Bearer <token>'
+        - lang: 'Javascript'
+          source: |
+            const axios = require('axios');
+
+            let config = {
+              method: 'get',
+              maxBodyLength: Infinity,
+              url: 'https://fr24api.flightradar24.com/api/static/airlines/afl/light',
+              headers: {
+                'Accept': 'application/json',
+                'Accept-Version': 'v1',
+                'Authorization': 'Bearer <token>'
+              }
+            };
+
+            axios.request(config)
+              .then((response) => {
+                console.log(JSON.stringify(response.data));
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        - lang: 'Go'
+          source: |
+            package main
+
+            import (
+              "fmt"
+              "net/http"
+              "io/ioutil"
+            )
+
+            func main() {
+
+              url := "https://fr24api.flightradar24.com/api/static/airlines/afl/light"
+              method := "GET"
+
+              client := &http.Client {
+              }
+              req, err := http.NewRequest(method, url, nil)
+
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              req.Header.Add("Accept", "application/json")
+              req.Header.Add("Accept-Version", "v1")
+              req.Header.Add("Authorization", "Bearer <token>")
+
+              res, err := client.Do(req)
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              defer res.Body.Close()
+
+              body, err := ioutil.ReadAll(res.Body)
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              fmt.Println(string(body))
+            }
+        - lang: 'Python'
+          source: |
+            import requests
+            import json
+
+            url = "https://fr24api.flightradar24.com/api/static/airlines/afl/light"
+            headers = {
+              'Accept': 'application/json',
+              'Accept-Version': 'v1',
+              'Authorization': 'Bearer <token>'
+            }
+
+            try:
+              response = requests.get(url, headers=headers)
+              response.raise_for_status()
+              data = response.json()
+              print(json.dumps(data, indent=4))
+            except requests.exceptions.HTTPError as http_err:
+              print(f"HTTP error occurred: {http_err}")
+            except Exception as err:
+                print(f"An error occurred: {err}")
+
+      summary: Get basic airline information by ICAO code
+      tags:
+        - Airlines light
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Airline'
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Validation failed
+                  details: The icao is not a valid ICAO code.
+                properties:
+                  message:
+                    type: string
+                  details:
+                    type: string
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "402":
+          $ref: "#/components/responses/PaymentRequired"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Not found
+                  details: The airline with the given ICAO code was not found.
+                properties:
+                  message:
+                    type: string
+                  details:
+                    type: string
+      operationId: get-airlines-light
+      description: Returns airline name, ICAO, and IATA codes.
+      parameters: [ ]
+      security:
+        - Authorization: [ ]
+
+  "/api/static/airports/{code}/full":
+    parameters:
+      - $ref: '#/components/parameters/AcceptVersion'
+      - schema:
+          type: string
+        name: code
+        in: path
+        required: true
+        description: Airports IATA or ICAO code.
+        examples:
+          IATA1:
+            value: LHR
+          IATA2:
+            value: DXB
+          ICAO1:
+            value: EGLL
+          ICAO2:
+            value: OMDB
+    get:
+      x-codeSamples:
+        - lang: 'bash'
+          label: 'CLI'
+          source: |
+            curl --location 'https://fr24api.flightradar24.com/api/static/airports/WAW/full' \
+            --header 'Accept: application/json' \
+            --header 'Accept-Version: v1' \
+            --header 'Authorization: Bearer <token>'
+        - lang: 'Javascript'
+          source: |
+            const axios = require('axios');
+
+            let config = {
+              method: 'get',
+              maxBodyLength: Infinity,
+              url: 'https://fr24api.flightradar24.com/static/airports/WAW/full',
+              headers: {
+                'Accept': 'application/json',
+                'Accept-Version': 'v1',
+                'Authorization': 'Bearer <token>'
+              }
+            };
+
+            axios.request(config)
+            .then((response) => {
+              console.log(JSON.stringify(response.data));
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        - lang: 'Go'
+          source: |
+            package main
+
+            import (
+              "fmt"
+              "net/http"
+              "io/ioutil"
+            )
+
+            func main() {
+
+              url := "https://fr24api.flightradar24.com/api/static/airports/WAW/full"
+              method := "GET"
+
+              client := &http.Client {
+              }
+              req, err := http.NewRequest(method, url, nil)
+
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              req.Header.Add("Accept", "application/json")
+              req.Header.Add("Accept-Version", "v1")
+              req.Header.Add("Authorization", "Bearer <token>")
+
+              res, err := client.Do(req)
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              defer res.Body.Close()
+
+              body, err := ioutil.ReadAll(res.Body)
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              fmt.Println(string(body))
+            }
+        - lang: 'Python'
+          source: |
+            import requests
+            import json
+
+            url = "https://fr24api.flightradar24.com/api/static/airports/WAW/full"
+            headers = {
+              'Accept': 'application/json',
+              'Accept-Version': 'v1',
+              'Authorization': 'Bearer <token>'
+            }
+
+            try:
+              response = requests.get(url, headers=headers)
+              response.raise_for_status()
+              data = response.json()
+              print(json.dumps(data, indent=4))
+            except requests.exceptions.HTTPError as http_err:
+              print(f"HTTP error occurred: {http_err}")
+            except Exception as err:
+                print(f"An error occurred: {err}")
+
+      summary: Get detailed airport information by code
+      tags:
+        - Airports full
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AirportDetailed"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Validation error
+                  details: The code is not a valid IATA or ICAO code.
+                properties:
+                  message:
+                    type: string
+                  details:
+                    type: string
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "402":
+          $ref: "#/components/responses/PaymentRequired"
+        "404":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Validation error
+                  details: The airport with the given code was not found.
+                properties:
+                  message:
+                    type: string
+                  details:
+                    type: string
+      operationId: get-airports-full
+      description: Returns details of the requested airport including its name, codes, location, elevation, and timezone information.
+      parameters: [ ]
+      security:
+        - Authorization: [ ]
+
+  "/api/static/airports/{code}/light":
+    parameters:
+      - $ref: '#/components/parameters/AcceptVersion'
+      - schema:
+          type: string
+        name: code
+        in: path
+        required: true
+        description: Airports IATA or ICAO code.
+        examples:
+          IATA1:
+            value: LHR
+          IATA2:
+            value: DXB
+          ICAO1:
+            value: EGLL
+          ICAO2:
+            value: OMDB
+    get:
+      x-codeSamples:
+        - lang: 'bash'
+          label: 'CLI'
+          source: |
+            curl --location 'https://fr24api.flightradar24.com/api/static/airports/WAW/light' \
+            --header 'Accept: application/json' \
+            --header 'Accept-Version: v1' \
+            --header 'Authorization: Bearer <token>'
+        - lang: 'Javascript'
+          source: |
+            const axios = require('axios');
+
+            let config = {
+              method: 'get',
+              maxBodyLength: Infinity,
+              url: 'https://fr24api.flightradar24.com/api/static/airports/WAW/light',
+              headers: {
+                'Accept': 'application/json',
+                'Accept-Version': 'v1',
+                'Authorization': 'Bearer <token>'
+              }
+            };
+
+            axios.request(config)
+            .then((response) => {
+              console.log(JSON.stringify(response.data));
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        - lang: 'Go'
+          source: |
+            package main
+
+            import (
+              "fmt"
+              "net/http"
+              "io/ioutil"
+            )
+
+            func main() {
+
+              url := "https://fr24api.flightradar24.com/api/static/airports/WAW/light"
+              method := "GET"
+
+              client := &http.Client {
+              }
+              req, err := http.NewRequest(method, url, nil)
+
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              req.Header.Add("Accept", "application/json")
+              req.Header.Add("Accept-Version", "v1")
+              req.Header.Add("Authorization", "Bearer <token>")
+
+              res, err := client.Do(req)
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              defer res.Body.Close()
+
+              body, err := ioutil.ReadAll(res.Body)
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              fmt.Println(string(body))
+            }
+        - lang: 'Python'
+          source: |
+            import requests
+            import json
+
+            url = "https://fr24api.flightradar24.com/api/static/airports/WAW/light"
+            headers = {
+              'Accept': 'application/json',
+              'Accept-Version': 'v1',
+              'Authorization': 'Bearer <token>'
+            }
+
+            try:
+              response = requests.get(url, headers=headers)
+              response.raise_for_status()
+              data = response.json()
+              print(json.dumps(data, indent=4))
+            except requests.exceptions.HTTPError as http_err:
+              print(f"HTTP error occurred: {http_err}")
+            except Exception as err:
+                print(f"An error occurred: {err}")
+
+      summary: Get basic airline information by code
+      tags:
+        - Airports light
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Airport"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Validation error
+                  details: The code is not a valid IATA or ICAO code.
+                properties:
+                  message:
+                    type: string
+                  details:
+                    type: string
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "402":
+          $ref: "#/components/responses/PaymentRequired"
+        "404":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Validation error
+                  details: The airport with the given code was not found.
+                properties:
+                  message:
+                    type: string
+                  details:
+                    type: string
+      operationId: get-airports-light
+      description: Returns the airport name, ICAO and IATA codes.
+      parameters: [ ]
+      security:
+        - Authorization: [ ]
+
+  "/api/live/flight-positions/full":
+    parameters: [ ]
+    get:
+      x-codeSamples:
+        - lang: 'bash'
+          label: 'CLI'
+          source: |
+            curl --location 'https://fr24api.flightradar24.com/api/live/flight-positions/full?bounds=50.682%2C46.218%2C14.422%2C22.243' \
+            --header 'Accept: application/json' \
+            --header 'Accept-Version: v1' \
+            --header 'Authorization: Bearer <token>'
+        - lang: 'Javascript'
+          source: |
+            const axios = require('axios');
+
+            let config = {
+              method: 'get',
+              maxBodyLength: Infinity,
+              url: 'https://fr24api.flightradar24.com/api/live/flight-positions/full?bounds=50.682,46.218,14.422,22.243',
+              headers: {
+                'Accept': 'application/json',
+                'Accept-Version': 'v1',
+                'Authorization': 'Bearer <token>'
+              }
+            };
+
+            axios.request(config)
+            .then((response) => {
+              console.log(JSON.stringify(response.data));
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
+        - lang: 'Go'
+          source: |
+            package main
+
+            import (
+              "fmt"
+              "net/http"
+              "io/ioutil"
+            )
+
+            func main() {
+
+              url := "https://fr24api.flightradar24.com/api/live/flight-positions/full?bounds=50.682%2C46.218%2C14.422%2C22.243"
+              method := "GET"
+
+              client := &http.Client {
+              }
+              req, err := http.NewRequest(method, url, nil)
+
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              req.Header.Add("Accept", "application/json")
+              req.Header.Add("Accept-Version", "v1")
+              req.Header.Add("Authorization", "Bearer <token>")
+
+              res, err := client.Do(req)
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              defer res.Body.Close()
+
+              body, err := ioutil.ReadAll(res.Body)
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              fmt.Println(string(body))
+            }
+        - lang: 'Python'
+          source: |
+            import requests
+            import json
+
+            url = "https://fr24api.flightradar24.com/api/live/flight-positions/full"
+            params = {
+              'bounds': '50.682,46.218,14.422,22.243'
+            }
+            headers = {
+              'Accept': 'application/json',
+              'Accept-Version': 'v1',
+              'Authorization': 'Bearer <token>'
+            }
+
+            try:
+              response = requests.get(url, headers=headers, params=params)
+              response.raise_for_status()
+              data = response.json()
+              print(json.dumps(data, indent=4))
+            except requests.exceptions.HTTPError as http_err:
+              print(f"HTTP error occurred: {http_err}")
+            except Exception as err:
+                print(f"An error occurred: {err}")
+      summary: Get real-time flight positions with detailed information
+      tags:
+        - Live flight positions full
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Flight"
+          headers: { }
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Validation error
+                  details: The registration is not a valid aircraft registration code.
+                properties:
+                  message:
+                    type: string
+                  details:
+                    type: string
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "402":
+          $ref: "#/components/responses/PaymentRequired"
+      operationId: get-live-flight-positions-full
+      description: Returns comprehensive real-time information on aircraft flight movements, including flight and aircraft details such as origin, destination, and aircraft type. At least one query parameter is required to retrieve data.
+      parameters:
+        - $ref: '#/components/parameters/AcceptVersion'
+        - name: bounds
+          schema:
+            type: string
+            example: "42.473,37.331,-10.014,-4.115"
+          in: query
+          description: "Coordinates defining an area. Order: north, south, west, east (comma-separated float values). Up to 3 decimal points will be processed."
+
+        - name: flights
+          schema:
+            type: string
+            example: "CA4515,UA1742"
+          in: query
+          description: Flight numbers (comma-separated values).
+
+        - name: callsigns
+          schema:
+            type: string
+            example: "WJA329,WSW102"
+          in: query
+          description: Flight callsigns (comma-separated values).
+
+        - name: registrations
+          schema:
+            type: string
+            example: "D-AFAM,EC-MQM"
+          in: query
+          description: Aircraft registration numbers (comma-separated values).
+
+        - name: painted_as
+          schema:
+            type: string
+            example: "SAS,ART"
+          in: query
+          description: Aircraft painted in an airline\'s livery, identified by ICAO code, but not necessarily operated by that airline, such as a regional airline operating a flight for a larger airline (comma-separated values).
+
+        - name: operating_as
+          schema:
+            type: string
+            example: "SAS,ART"
+          in: query
+          description: Aircraft operating under an airline\'s call sign, identified by ICAO code, but not necessarily an aircraft belonging to that airline, such as an aircraft on lease from another airline (comma-separated values).
+
+        - name: airports
+          schema:
+            type: string
+            example: "LHR,SE,inbound:WAW,US,outbound:JFK,both:ESSA"
+          in: query
+          description: |
+            Airports specified by IATA or ICAO codes or countries specified by ISO 3166-1 alpha-2 codes (comma-separated values)
+            To determine direction use format: &#60;direction&#62;:&#60;code&#62; (colon-separated)<br><br>
+            Available directions:
+            - both - both directions (default direction when not specified)
+            - inbound - flights to airport
+            - outbound - flight from airport
+
+        - name: routes
+          schema:
+            type: string
+            example: "SE-US,ESSA-JFK"
+          in: query
+          description: Flights between different airports or countries. Airports specified by IATA or ICAO codes or countries specified by ISO 3166-1 alpha-2 codes (comma-separated values).
+
+        - name: aircraft
+          schema:
+            type: string
+            example: "B38M,B738"
+          in: query
+          description: Aircraft ICAO type codes (comma-separated values).
+
+        - name: altitude_ranges
+          schema:
+            type: string
+            example: "0-3000,5000-7000"
+          in: query
+          description: "Flight altitude ranges (comma-separated values). Unit: feet. Minimum value: 0."
+
+        - name: squawks
+          schema:
+            type: string
+            example: "6135,7070"
+          in: query
+          description: "Squawk codes in hex format (comma-separated values)."
+
+        - name: categories
+          schema:
+            type: string
+            example: "P,C"
+          in: query
+          description: |
+            Categories of Flights (comma-separated values).
+            Available values:
+            - <b>P</b> - PASSENGER - Commercial aircraft that carry passengers as their primary purpose
+            - <b>C</b> - CARGO - Aircraft that carry only cargo
+            - <b>M</b> - MILITARY_AND_GOVERNMENT - Aircraft operated by military or a governmental agency
+            - <b>J</b> - BUSINESS_JETS - Larger private aircraft, such as Gulfstream, Bombardier, and Pilatus
+            - <b>T</b> - GENERAL_AVIATION - Non-commercial transport flights, including private, ambulance, aerial survey, flight training and instrument calibration aircraft
+            - <b>H</b> - HELICOPTERS - Rotary wing aircraft
+            - <b>B</b> - LIGHTER_THAN_AIR - Lighter-than-air aircraft include gas-filled airships of all kinds
+            - <b>G</b> - GLIDERS - Unpowered aircraft
+            - <b>D</b> - DRONES - Uncrewed aircraft, ranging from small consumer drones to larger UAVs
+            - <b>V</b> - GROUND_VEHICLES - Transponder equipped vehicles, such as push-back tugs, fire trucks, and operations vehicles
+            - <b>O</b> - OTHER - Aircraft appearing on Flightradar24 not classified elsewhere (International Space Station, UFOs, Santa, etc)
+            - <b>N</b> - NON_CATEGORIZED - Aircraft not yet placed into a category in the Flightradar24 database
+
+        - name: data_sources
+          schema:
+            type: string
+            example: "ADSB,MLAT,ESTIMATED"
+          in: query
+          description: |
+            Source of information about flights (comma-separated values).
+            Available values:
+              - ADSB
+              - MLAT
+              - ESTIMATED
+              - <i>Empty parameter will include all sources.</i>
+
+        - name: airspaces
+          schema:
+            type: string
+            example: "ESAA,LFFF"
+          in: query
+          description: Flight information region in lower or upper airspace.
+
+        - name: limit
+          schema:
+            type: integer
+            example: 100
+          in: query
+          description: "Limit of results. Max value 30000."
+      security:
+        - Authorization: [ ]
+
+  "/api/live/flight-positions/light":
+    parameters: [ ]
+    get:
+      x-codeSamples:
+        - lang: 'bash'
+          label: 'CLI'
+          source: |
+            curl --location 'https://fr24api.flightradar24.com/api/live/flight-positions/light?bounds=50.682%2C46.218%2C14.422%2C22.243' \
+            --header 'Accept: application/json' \
+            --header 'Accept-Version: v1' \
+            --header 'Authorization: Bearer <token>'
+        - lang: 'Javascript'
+          source: |
+            const axios = require('axios');
+
+            let config = {
+              method: 'get',
+              maxBodyLength: Infinity,
+              url: 'https://fr24api.flightradar24.com/api/live/flight-positions/light?bounds=50.682,46.218,14.422,22.243',
+              headers: {
+                'Accept': 'application/json',
+                'Accept-Version': 'v1',
+                'Authorization': 'Bearer <token>'
+              }
+            };
+
+            axios.request(config)
+            .then((response) => {
+              console.log(JSON.stringify(response.data));
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
+        - lang: 'Go'
+          source: |
+            package main
+
+            import (
+              "fmt"
+              "net/http"
+              "io/ioutil"
+            )
+
+            func main() {
+
+              url := "https://fr24api.flightradar24.com/api/live/flight-positions/light?bounds=50.682%2C46.218%2C14.422%2C22.243"
+              method := "GET"
+
+              client := &http.Client {
+              }
+              req, err := http.NewRequest(method, url, nil)
+
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              req.Header.Add("Accept", "application/json")
+              req.Header.Add("Accept-Version", "v1")
+              req.Header.Add("Authorization", "Bearer <token>")
+
+              res, err := client.Do(req)
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              defer res.Body.Close()
+
+              body, err := ioutil.ReadAll(res.Body)
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              fmt.Println(string(body))
+            }
+        - lang: 'Python'
+          source: |
+            import requests
+            import json
+
+            url = "https://fr24api.flightradar24.com/api/live/flight-positions/light"
+            params = {
+              'bounds': '50.682,46.218,14.422,22.243'
+            }
+            headers = {
+              'Accept': 'application/json',
+              'Accept-Version': 'v1',
+              'Authorization': 'Bearer <token>'
+            }
+
+            try:
+              response = requests.get(url, headers=headers, params=params)
+              response.raise_for_status()
+              data = response.json()
+              print(json.dumps(data, indent=4))
+            except requests.exceptions.HTTPError as http_err:
+              print(f"HTTP error occurred: {http_err}")
+            except Exception as err:
+                print(f"An error occurred: {err}")
+
+      summary: Get real-time flight positions
+      tags:
+        - Live flight positions light
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/FlightPositions"
+          headers: { }
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Validation error
+                  details: The registration is not a valid aircraft registration code.
+                properties:
+                  message:
+                    type: string
+                  details:
+                    type: string
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "402":
+          $ref: "#/components/responses/PaymentRequired"
+      operationId: get-live-flight-positions-light
+      description: Returns real-time information on aircraft flight movements including latitude, longitude, speed, and altitude. At least one query parameter is required to retrieve data.
+      parameters:
+        - $ref: '#/components/parameters/AcceptVersion'
+        - name: bounds
+          schema:
+            type: string
+            example: "42.473,37.331,-10.014,-4.115"
+          in: query
+          description: "Coordinates defining an area. Order: north, south, west, east (comma-separated float values). Up to 3 decimal points will be processed."
+
+        - name: flights
+          schema:
+            type: string
+            example: "CA4515,UA1742"
+          in: query
+          description: Flight numbers (comma-separated values).
+
+        - name: callsigns
+          schema:
+            type: string
+            example: "WJA329,WSW102"
+          in: query
+          description: Flight callsigns (comma-separated values).
+
+        - name: registrations
+          schema:
+            type: string
+            example: "D-AFAM,EC-MQM"
+          in: query
+          description: Aircraft registration numbers (comma-separated values).
+
+        - name: painted_as
+          schema:
+            type: string
+            example: "SAS,ART"
+          in: query
+          description: Aircraft painted in an airline\'s livery, identified by ICAO code, but not necessarily operated by that airline, such as a regional airline operating a flight for a larger airline (comma-separated values).
+
+        - name: operating_as
+          schema:
+            type: string
+            example: "SAS,ART"
+          in: query
+          description: Aircraft operating under an airline\'s call sign, identified by ICAO code, but not necessarily an aircraft belonging to that airline, such as an aircraft on lease from another airline (comma-separated values).
+
+        - name: airports
+          schema:
+            type: string
+            example: "LHR,SE,inbound:WAW,US,outbound:JFK,both:ESSA"
+          in: query
+          description: |
+            Airports specified by IATA or ICAO codes or countries specified by ISO 3166-1 alpha-2 codes (comma-separated values)
+            To determine direction use format: &#60;direction&#62;:&#60;code&#62; (colon-separated)<br><br>
+            Available directions:
+            - both - both directions (default direction when not specified)
+            - inbound - flights to airport
+            - outbound - flight from airport
+
+        - name: routes
+          schema:
+            type: string
+            example: "SE-US,ESSA-JFK"
+          in: query
+          description: Flights between different airports or countries. Airports specified by IATA or ICAO codes or countries specified by ISO 3166-1 alpha-2 codes (comma-separated values).
+
+        - name: aircraft
+          schema:
+            type: string
+            example: "B38M,B738"
+          in: query
+          description: Aircraft ICAO type codes (comma-separated values).
+
+        - name: altitude_ranges
+          schema:
+            type: string
+            example: "0-3000,5000-7000"
+          in: query
+          description: "Flight altitude ranges (comma-separated values). Unit: feet. Minimum value: 0."
+
+        - name: squawks
+          schema:
+            type: string
+            example: "6135,7070"
+          in: query
+          description: "Squawk codes in hex format (comma-separated values)."
+
+        - name: categories
+          schema:
+            type: string
+            example: "P,C"
+          in: query
+          description: |
+            Categories of Flights (comma-separated values).
+            Available values:
+            - <b>P</b> - PASSENGER - Commercial aircraft that carry passengers as their primary purpose
+            - <b>C</b> - CARGO - Aircraft that carry only cargo
+            - <b>M</b> - MILITARY_AND_GOVERNMENT - Aircraft operated by military or a governmental agency
+            - <b>J</b> - BUSINESS_JETS - Larger private aircraft, such as Gulfstream, Bombardier, and Pilatus
+            - <b>T</b> - GENERAL_AVIATION - Non-commercial transport flights, including private, ambulance, aerial survey, flight training and instrument calibration aircraft
+            - <b>H</b> - HELICOPTERS - Rotary wing aircraft
+            - <b>B</b> - LIGHTER_THAN_AIR - Lighter-than-air aircraft include gas-filled airships of all kinds
+            - <b>G</b> - GLIDERS - Unpowered aircraft
+            - <b>D</b> - DRONES - Uncrewed aircraft, ranging from small consumer drones to larger UAVs
+            - <b>V</b> - GROUND_VEHICLES - Transponder equipped vehicles, such as push-back tugs, fire trucks, and operations vehicles
+            - <b>O</b> - OTHER - Aircraft appearing on Flightradar24 not classified elsewhere (International Space Station, UFOs, Santa, etc)
+            - <b>N</b> - NON_CATEGORIZED - Aircraft not yet placed into a category in the Flightradar24 database
+
+        - name: data_sources
+          schema:
+            type: string
+            example: "ADSB,MLAT,ESTIMATED"
+          in: query
+          description: |
+            Source of information about flights (comma-separated values).
+            Available values:
+              - ADSB
+              - MLAT
+              - ESTIMATED
+              - <i>Empty parameter will include all sources.</i>
+
+        - name: airspaces
+          schema:
+            type: string
+            example: "ESAA,LFFF"
+          in: query
+          description: Flight information region in lower or upper airspace.
+
+        - name: limit
+          schema:
+            type: integer
+            example: 100
+          in: query
+          description: "Limit of results. Max value 30000."
+      security:
+        - Authorization: [ ]
+
+  "/api/historic/flight-positions/full":
+    parameters: [ ]
+    get:
+      x-codeSamples:
+        - lang: 'bash'
+          label: 'CLI'
+          source: |
+            curl --location 'https://fr24api.flightradar24.com/api/historic/flight-positions/full?bounds=50.682%2C46.218%2C14.422%2C22.243&timestamp=1702383145' \
+            --header 'Accept: application/json' \
+            --header 'Accept-Version: v1' \
+            --header 'Authorization: Bearer <token>'
+        - lang: 'Javascript'
+          source: |
+            const axios = require('axios');
+
+            let config = {
+              method: 'get',
+              maxBodyLength: Infinity,
+              url: 'https://fr24api.flightradar24.com/api/historic/flight-positions/full?bounds=50.682,46.218,14.422,22.243&timestamp=1702383145',
+              headers: {
+                'Accept': 'application/json',
+                'Accept-Version': 'v1',
+                'Authorization': 'Bearer <token>'
+              }
+            };
+
+            axios.request(config)
+            .then((response) => {
+              console.log(JSON.stringify(response.data));
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        - lang: 'Go'
+          source: |
+            package main
+
+            import (
+              "fmt"
+              "net/http"
+              "io/ioutil"
+            )
+
+            func main() {
+
+              url := "https://fr24api.flightradar24.com/api/historic/flight-positions/full?bounds=50.682%2C46.218%2C14.422%2C22.243&timestamp=1702383145"
+              method := "GET"
+
+              client := &http.Client {
+              }
+              req, err := http.NewRequest(method, url, nil)
+
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              req.Header.Add("Accept", "application/json")
+              req.Header.Add("Accept-Version", "v1")
+              req.Header.Add("Authorization", "Bearer <token>")
+
+              res, err := client.Do(req)
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              defer res.Body.Close()
+
+              body, err := ioutil.ReadAll(res.Body)
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              fmt.Println(string(body))
+            }
+        - lang: 'Python'
+          source: |
+            import requests
+            import json
+
+            url = "https://fr24api.flightradar24.com/api/historic/flight-positions/full"
+            params = {
+              'bounds': '50.682,46.218,14.422,22.243',
+              'timestamp': '1702383145'
+            }
+            headers = {
+              'Accept': 'application/json',
+              'Accept-Version': 'v1',
+              'Authorization': 'Bearer <token>'
+            }
+
+            try:
+              response = requests.get(url, headers=headers, params=params)
+              response.raise_for_status()
+              data = response.json()
+              print(json.dumps(data, indent=4))
+            except requests.exceptions.HTTPError as http_err:
+              print(f"HTTP error occurred: {http_err}")
+            except Exception as err:
+                print(f"An error occurred: {err}")
+
+      summary: Get historical flight positions
+      tags:
+        - Historic flight positions full
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Flight"
+          headers: { }
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Validation error
+                  details: The registration is not a valid aircraft registration code.
+                properties:
+                  message:
+                    type: string
+                  details:
+                    type: string
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "402":
+          $ref: "#/components/responses/PaymentRequired"
+      operationId: get-historic-flight-positions-full
+      description: Returns comprehensive historical information on aircraft flight movements, including flight and aircraft details such as origin, destination, and aircraft type for up to three years. At least one query parameter and a history snapshot timestamp are required to retrieve data.
+      parameters:
+        - $ref: '#/components/parameters/AcceptVersion'
+        - name: timestamp
+          schema:
+            type: integer
+            example: "1702383145"
+          in: query
+          description: "Unix timestamp representing the exact point in time for which you want to fetch flight positions. The timestamp must be within the past 3 years, subject to your subscription plan's limitations. Only one timestamp value is accepted; time ranges are not supported"
+          required: true
+        - name: bounds
+          schema:
+            type: string
+            example: "42.473,37.331,-10.014,-4.115"
+          in: query
+          description: "Coordinates defining an area. Order: north, south, west, east (comma-separated float values). Up to 3 decimal points will be processed."
+
+        - name: flights
+          schema:
+            type: string
+            example: "CA4515,UA1742"
+          in: query
+          description: Flight numbers (comma-separated values).
+
+        - name: callsigns
+          schema:
+            type: string
+            example: "WJA329,WSW102"
+          in: query
+          description: Flight callsigns (comma-separated values).
+
+        - name: registrations
+          schema:
+            type: string
+            example: "D-AFAM,EC-MQM"
+          in: query
+          description: Aircraft registration numbers (comma-separated values).
+
+        - name: painted_as
+          schema:
+            type: string
+            example: "SAS,ART"
+          in: query
+          description: Aircraft painted in an airline\'s livery, identified by ICAO code, but not necessarily operated by that airline, such as a regional airline operating a flight for a larger airline (comma-separated values).
+
+        - name: operating_as
+          schema:
+            type: string
+            example: "SAS,ART"
+          in: query
+          description: Aircraft operating under an airline\'s call sign, identified by ICAO code, but not necessarily an aircraft belonging to that airline, such as an aircraft on lease from another airline (comma-separated values).
+
+        - name: airports
+          schema:
+            type: string
+            example: "LHR,SE,inbound:WAW,US,outbound:JFK,both:ESSA"
+          in: query
+          description: |
+            Airports specified by IATA or ICAO codes or countries specified by ISO 3166-1 alpha-2 codes (comma-separated values)
+            To determine direction use format: &#60;direction&#62;:&#60;code&#62; (colon-separated)<br><br>
+            Available directions:
+            - both - both directions (default direction when not specified)
+            - inbound - flights to airport
+            - outbound - flight from airport
+
+        - name: routes
+          schema:
+            type: string
+            example: "SE-US,ESSA-JFK"
+          in: query
+          description: Flights between different airports or countries. Airports specified by IATA or ICAO codes or countries specified by ISO 3166-1 alpha-2 codes (comma-separated values).
+
+        - name: aircraft
+          schema:
+            type: string
+            example: "B38M,B738"
+          in: query
+          description: Aircraft ICAO type codes (comma-separated values).
+
+        - name: altitude_ranges
+          schema:
+            type: string
+            example: "0-3000,5000-7000"
+          in: query
+          description: "Flight altitude ranges (comma-separated values). Unit: feet. Minimum value: 0."
+
+        - name: squawks
+          schema:
+            type: string
+            example: "6135,7070"
+          in: query
+          description: "Squawk codes in hex format (comma-separated values)."
+
+        - name: categories
+          schema:
+            type: string
+            example: "P,C"
+          in: query
+          description: |
+            Categories of Flights (comma-separated values).
+            Available values:
+            - <b>P</b> - PASSENGER - Commercial aircraft that carry passengers as their primary purpose
+            - <b>C</b> - CARGO - Aircraft that carry only cargo
+            - <b>M</b> - MILITARY_AND_GOVERNMENT - Aircraft operated by military or a governmental agency
+            - <b>J</b> - BUSINESS_JETS - Larger private aircraft, such as Gulfstream, Bombardier, and Pilatus
+            - <b>T</b> - GENERAL_AVIATION - Non-commercial transport flights, including private, ambulance, aerial survey, flight training and instrument calibration aircraft
+            - <b>H</b> - HELICOPTERS - Rotary wing aircraft
+            - <b>B</b> - LIGHTER_THAN_AIR - Lighter-than-air aircraft include gas-filled airships of all kinds
+            - <b>G</b> - GLIDERS - Unpowered aircraft
+            - <b>D</b> - DRONES - Uncrewed aircraft, ranging from small consumer drones to larger UAVs
+            - <b>V</b> - GROUND_VEHICLES - Transponder equipped vehicles, such as push-back tugs, fire trucks, and operations vehicles
+            - <b>O</b> - OTHER - Aircraft appearing on Flightradar24 not classified elsewhere (International Space Station, UFOs, Santa, etc)
+            - <b>N</b> - NON_CATEGORIZED - Aircraft not yet placed into a category in the Flightradar24 database
+
+        - name: data_sources
+          schema:
+            type: string
+            example: "ADSB,MLAT,ESTIMATED"
+          in: query
+          description: |
+            Source of information about flights (comma-separated values).
+            Available values:
+              - ADSB
+              - MLAT
+              - ESTIMATED
+              - <i>Empty parameter will include all sources.</i>
+
+        - name: limit
+          schema:
+            type: integer
+            example: 100
+          in: query
+          description: "Limit of results. Max value 30000."
+      security:
+        - Authorization: [ ]
+
+  "/api/historic/flight-positions/light":
+    parameters: [ ]
+    get:
+      x-codeSamples:
+        - lang: 'bash'
+          label: 'CLI'
+          source: |
+            curl --location 'https://fr24api.flightradar24.com/api/historic/flight-positions/light?bounds=50.682%2C46.218%2C14.422%2C22.243&timestamp=1702383145' \
+            --header 'Accept: application/json' \
+            --header 'Accept-Version: v1' \
+            --header 'Authorization: Bearer <token>'
+        - lang: 'Javascript'
+          source: |
+            const axios = require('axios');
+
+            let config = {
+              method: 'get',
+              maxBodyLength: Infinity,
+              url: 'https://fr24api.flightradar24.com/api/historic/flight-positions/light?bounds=50.682,46.218,14.422,22.243&timestamp=1702383145',
+              headers: {
+                'Accept': 'application/json',
+                'Accept-Version': 'v1',
+                'Authorization': 'Bearer <token>'
+              }
+            };
+
+            axios.request(config)
+            .then((response) => {
+              console.log(JSON.stringify(response.data));
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
+        - lang: 'Go'
+          source: |
+            package main
+
+            import (
+              "fmt"
+              "net/http"
+              "io/ioutil"
+            )
+
+            func main() {
+
+              url := "https://fr24api.flightradar24.com/api/historic/flight-positions/light?bounds=50.682%2C46.218%2C14.422%2C22.243&timestamp=1702383145"
+              method := "GET"
+
+              client := &http.Client {
+              }
+              req, err := http.NewRequest(method, url, nil)
+
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              req.Header.Add("Accept", "application/json")
+              req.Header.Add("Accept-Version", "v1")
+              req.Header.Add("Authorization", "Bearer <token>")
+
+              res, err := client.Do(req)
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              defer res.Body.Close()
+
+              body, err := ioutil.ReadAll(res.Body)
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              fmt.Println(string(body))
+            }
+        - lang: 'Python'
+          source: |
+            import requests
+            import json
+
+            url = "https://fr24api.flightradar24.com/api/historic/flight-positions/light"
+            params = {
+              'bounds': '50.682,46.218,14.422,22.243',
+              'timestamp': '1702383145'
+            }
+            headers = {
+              'Accept': 'application/json',
+              'Accept-Version': 'v1',
+              'Authorization': 'Bearer <token>'
+            }
+
+            try:
+              response = requests.get(url, headers=headers, params=params)
+              response.raise_for_status()
+              data = response.json()
+              print(json.dumps(data, indent=4))
+            except requests.exceptions.HTTPError as http_err:
+              print(f"HTTP error occurred: {http_err}")
+            except Exception as err:
+                print(f"An error occurred: {err}")
+
+      summary: Get historical flight positions with basic details
+      tags:
+        - Historic flight positions light
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/FlightPositions"
+          headers: { }
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Validation error
+                  details: The registration is not a valid aircraft registration code.
+                properties:
+                  message:
+                    type: string
+                  details:
+                    type: string
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "402":
+          $ref: "#/components/responses/PaymentRequired"
+      operationId: get-historic-flight-positions-light
+      description: Returns historical information on aircraft flight movements including latitude, longitude, speed, and altitude for up to three years. At least one query parameter and a history snapshot timestamp are required to retrieve data.
+      parameters:
+        - $ref: '#/components/parameters/AcceptVersion'
+        - name: timestamp
+          schema:
+            type: integer
+            example: "1702383145"
+          in: query
+          description: "Unix timestamp representing the exact point in time for which you want to fetch flight positions. The timestamp must be within the past 3 years, subject to your subscription plan's limitations. Only one timestamp value is accepted; time ranges are not supported"
+          required: true
+        - name: bounds
+          schema:
+            type: string
+            example: "42.473,37.331,-10.014,-4.115"
+          in: query
+          description: "Coordinates defining an area. Order: north, south, west, east (comma-separated float values). Up to 3 decimal points will be processed."
+
+        - name: flights
+          schema:
+            type: string
+            example: "CA4515,UA1742"
+          in: query
+          description: Flight numbers (comma-separated values).
+
+        - name: callsigns
+          schema:
+            type: string
+            example: "WJA329,WSW102"
+          in: query
+          description: Flight callsigns (comma-separated values).
+
+        - name: registrations
+          schema:
+            type: string
+            example: "D-AFAM,EC-MQM"
+          in: query
+          description: Aircraft registration numbers (comma-separated values).
+
+        - name: painted_as
+          schema:
+            type: string
+            example: "SAS,ART"
+          in: query
+          description: Aircraft painted in an airline\'s livery, identified by ICAO code, but not necessarily operated by that airline, such as a regional airline operating a flight for a larger airline (comma-separated values).
+
+        - name: operating_as
+          schema:
+            type: string
+            example: "SAS,ART"
+          in: query
+          description: Aircraft operating under an airline\'s call sign, identified by ICAO code, but not necessarily an aircraft belonging to that airline, such as an aircraft on lease from another airline (comma-separated values).
+
+        - name: airports
+          schema:
+            type: string
+            example: "LHR,SE,inbound:WAW,US,outbound:JFK,both:ESSA"
+          in: query
+          description: |
+            Airports specified by IATA or ICAO codes or countries specified by ISO 3166-1 alpha-2 codes (comma-separated values)
+            To determine direction use format: &#60;direction&#62;:&#60;code&#62; (colon-separated)<br><br>
+            Available directions:
+            - both - both directions (default direction when not specified)
+            - inbound - flights to airport
+            - outbound - flight from airport
+
+        - name: routes
+          schema:
+            type: string
+            example: "SE-US,ESSA-JFK"
+          in: query
+          description: Flights between different airports or countries. Airports specified by IATA or ICAO codes or countries specified by ISO 3166-1 alpha-2 codes (comma-separated values).
+
+        - name: aircraft
+          schema:
+            type: string
+            example: "B38M,B738"
+          in: query
+          description: Aircraft ICAO type codes (comma-separated values).
+
+        - name: altitude_ranges
+          schema:
+            type: string
+            example: "0-3000,5000-7000"
+          in: query
+          description: "Flight altitude ranges (comma-separated values). Unit: feet. Minimum value: 0."
+
+        - name: squawks
+          schema:
+            type: string
+            example: "6135,7070"
+          in: query
+          description: "Squawk codes in hex format (comma-separated values)."
+
+        - name: categories
+          schema:
+            type: string
+            example: "P,C"
+          in: query
+          description: |
+            Categories of Flights (comma-separated values).
+            Available values:
+            - <b>P</b> - PASSENGER - Commercial aircraft that carry passengers as their primary purpose
+            - <b>C</b> - CARGO - Aircraft that carry only cargo
+            - <b>M</b> - MILITARY_AND_GOVERNMENT - Aircraft operated by military or a governmental agency
+            - <b>J</b> - BUSINESS_JETS - Larger private aircraft, such as Gulfstream, Bombardier, and Pilatus
+            - <b>T</b> - GENERAL_AVIATION - Non-commercial transport flights, including private, ambulance, aerial survey, flight training and instrument calibration aircraft
+            - <b>H</b> - HELICOPTERS - Rotary wing aircraft
+            - <b>B</b> - LIGHTER_THAN_AIR - Lighter-than-air aircraft include gas-filled airships of all kinds
+            - <b>G</b> - GLIDERS - Unpowered aircraft
+            - <b>D</b> - DRONES - Uncrewed aircraft, ranging from small consumer drones to larger UAVs
+            - <b>V</b> - GROUND_VEHICLES - Transponder equipped vehicles, such as push-back tugs, fire trucks, and operations vehicles
+            - <b>O</b> - OTHER - Aircraft appearing on Flightradar24 not classified elsewhere (International Space Station, UFOs, Santa, etc)
+            - <b>N</b> - NON_CATEGORIZED - Aircraft not yet placed into a category in the Flightradar24 database
+
+        - name: data_sources
+          schema:
+            type: string
+            example: "ADSB,MLAT,ESTIMATED"
+          in: query
+          description: |
+            Source of information about flights (comma-separated values).
+            Available values:
+              - ADSB
+              - MLAT
+              - ESTIMATED
+              - <i>Empty parameter will include all sources.</i>
+
+        - name: limit
+          schema:
+            type: integer
+            example: 100
+          in: query
+          description: "Limit of results. Max value 30000."
+      security:
+        - Authorization: [ ]
+
+  "/api/flight-tracks":
+    parameters: [ ]
+    get:
+      x-codeSamples:
+        - lang: 'bash'
+          label: 'CLI'
+          source: |
+            curl --location 'https://fr24api.flightradar24.com/api/flight-tracks?flight_id=34242a02' \
+            --header 'Accept: application/json' \
+            --header 'Accept-Version: v1' \
+            --header 'Authorization: Bearer <token>'
+        - lang: 'Javascript'
+          source: |
+            const axios = require('axios');
+
+            let config = {
+              method: 'get',
+              maxBodyLength: Infinity,
+              url: 'https://fr24api.flightradar24.com/api/flight-tracks?flight_id=34242a02',
+              headers: {
+                'Accept': 'application/json',
+                'Accept-Version': 'v1',
+                'Authorization': 'Bearer <token>'
+              }
+            };
+
+            axios.request(config)
+            .then((response) => {
+              console.log(JSON.stringify(response.data));
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
+        - lang: 'Go'
+          source: |
+            package main
+
+            import (
+              "fmt"
+              "net/http"
+              "io/ioutil"
+            )
+
+            func main() {
+
+              url := "https://fr24api.flightradar24.com/api/flight-tracks?flight_id=34242a02"
+              method := "GET"
+
+              client := &http.Client {
+              }
+              req, err := http.NewRequest(method, url, nil)
+
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              req.Header.Add("Accept", "application/json")
+              req.Header.Add("Accept-Version", "v1")
+              req.Header.Add("Authorization", "Bearer <token>")
+
+              res, err := client.Do(req)
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              defer res.Body.Close()
+
+              body, err := ioutil.ReadAll(res.Body)
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              fmt.Println(string(body))
+            }
+        - lang: 'Python'
+          source: |
+            import requests
+            import json
+
+            url = "https://fr24api.flightradar24.com/api/flight-tracks"
+            params = {
+              'flight_id': '34242a02'
+            }
+            headers = {
+              'Accept': 'application/json',
+              'Accept-Version': 'v1',
+              'Authorization': 'Bearer <token>'
+            }
+
+            try:
+              response = requests.get(url, headers=headers, params=params)
+              response.raise_for_status()
+              data = response.json()
+              print(json.dumps(data, indent=4))
+            except requests.exceptions.HTTPError as http_err:
+              print(f"HTTP error occurred: {http_err}")
+            except Exception as err:
+                print(f"An error occurred: {err}")
+
+      summary: Get positional tracks for a specific flight
+      tags:
+        - Flight tracks
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FlightTracks"
+          headers: { }
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Validation error
+                  details: The flight id field is required.
+                properties:
+                  message:
+                    type: string
+                  details:
+                    type: string
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "402":
+          $ref: "#/components/responses/PaymentRequired"
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: Not found
+                  details: The requested flight could not be found.
+                properties:
+                  message:
+                    type: string
+                  details:
+                    type: string
+      operationId: get-flights-tracks
+      description: Returns a flight with positional tracks for both live and historical flights based on the FR24 flight ID. Availability of historical data depends on the user's subscription plan, with a maximum limit of up to 3 years.
+      parameters:
+        - $ref: '#/components/parameters/AcceptVersion'
+        - name: flight_id
+          schema:
+            type: string
+            example: "34242a02"
+          in: query
+          description: "Flightradar24 id of active flight in hexadecimal"
+
+      security:
+        - Authorization: [ ]
+
+  "/api/usage":
+    get:
+      x-codeSamples:
+        - lang: 'bash'
+          label: 'CLI'
+          source: |
+            curl --location 'https://fr24api.flightradar24.com/api/usage' \
+            --header 'Accept-Version: v1' \
+            --header 'Authorization: Bearer <token>'
+        - lang: 'Javascript'
+          source: |
+            const axios = require('axios');
+
+            let config = {
+              method: 'get',
+              maxBodyLength: Infinity,
+              url: 'https://fr24api.flightradar24.com/api/usage',
+              headers: {
+                'Accept-Version': 'v1',
+                'Authorization': 'Bearer <token>'
+              }
+            };
+
+            axios.request(config)
+            .then((response) => {
+              console.log(JSON.stringify(response.data));
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+
+        - lang: 'Go'
+          source: |
+            package main
+
+            import (
+              "fmt"
+              "net/http"
+              "io/ioutil"
+            )
+
+            func main() {
+
+              url := "https://fr24api.flightradar24.com/api/usage"
+              method := "GET"
+
+              client := &http.Client {
+              }
+              req, err := http.NewRequest(method, url, nil)
+
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              req.Header.Add("Accept-Version", "v1")
+              req.Header.Add("Authorization", "Bearer <token>")
+
+              res, err := client.Do(req)
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              defer res.Body.Close()
+
+              body, err := ioutil.ReadAll(res.Body)
+              if err != nil {
+                fmt.Println(err)
+                return
+              }
+              fmt.Println(string(body))
+            }
+        - lang: 'Python'
+          source: |
+            import requests
+            import json
+
+            url = "https://fr24api.flightradar24.com/api/usage"
+            headers = {
+              'Accept-Version': 'v1',
+              'Authorization': 'Bearer <token>'
+            }
+
+            try:
+              response = requests.get(url, headers=headers)
+              response.raise_for_status()
+              data = response.json()
+              print(json.dumps(data, indent=4))
+            except requests.exceptions.HTTPError as http_err:
+              print(f"HTTP error occurred: {http_err}")
+            except Exception as err:
+                print(f"An error occurred: {err}")
+
+      summary: Get info on API account usage
+      tags:
+        - Usage
+      responses:
+        "200":
+          description: Success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/UsageLogSummary"
+        "400":
+          $ref: "#/components/responses/UsageLogSummaryValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+      operationId: get-api-usage
+      parameters:
+        - $ref: '#/components/parameters/AcceptVersion'
+        - schema:
+            type: string
+            enum:
+              - 24h
+              - 7d
+              - 30d
+              - 1y
+            default: 24h
+            example: 30d
+          in: query
+          name: period
+      description: ""
+      security:
+        - Authorization: [ ]
+components:
+  parameters:
+    AcceptVersion:
+      name: Accept-Version
+      in: header
+      description: Specifies the FR24 API version. The currently available version is `v1`.
+      required: true
+      schema:
+        default: 'v1'
+        type: string
+      example: v1
+  schemas:
+    Flight:
+      type: object
+      example:
+        fr24_id: 321a0cc3
+        flight: AF1463
+        callsign: AFR1463
+        lat: -0.08806
+        lon: -168.07118
+        track: 219
+        alt: 38000
+        gspeed: 500
+        vspeed: 340
+        squawk: 6135
+        timestamp: "2023-11-08T10:10:00Z"
+        source: ADSB
+        hex: 394C19
+        type: A321
+        reg: F-GTAZ
+        painted_as: THY
+        operating_as: THY
+        orig_iata: ARN
+        orig_icao: ESSA
+        dest_iata: LHR
+        dest_icao: EGLL
+        eta: "2023-11-08T16:12:24Z"
+      properties:
+        fr24_id:
+          type: string
+          description: Unique identifier assigned by Flightradar24 to each flight leg.
+        flight:
+          type: string
+          nullable: true
+          description: Commercial flight number.
+        callsign:
+          type: string
+          nullable: true
+          description: Callsign used by Air Traffic Control to denote a specific flight (as sent by aircraft transponder).
+        lat:
+          type: number
+          format: float
+          description: Latest latitude expressed in decimal degrees.
+        lon:
+          type: number
+          format: float
+          description: Latest longitude expressed in decimal degrees.
+        track:
+          type: integer
+          description: True track (over ground) expressed in integer degrees as 0-360. Please note that 0 can in some cases mean unknown.
+        alt:
+          type: integer
+          description: Barometric pressure altitude above mean sea level (AMSL) reported at a standard atmospheric pressure (1013.25 hPa / 29.92 in. Hg.) expressed in feet.
+        gspeed:
+          type: integer
+          description: Speed relative to the ground expressed in knots.
+        vspeed:
+          type: integer
+          description: The rate at which the aircraft is ascending or descending in feet per minute.
+        squawk:
+          type: string
+          description: 4 digit unique identifying code for ATC expressed in octal format.
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp of the flight position expressed in UTC (ISO 8601 date format).
+        source:
+          type: string
+          description: Data source of the provided flight position.
+        hex:
+          type: string
+          description: 24 bit Mode-S identifier expressed in hexadecimal format.
+          nullable: true
+        type:
+          type: string
+          nullable: true
+          description: Aircraft ICAO type code.
+        reg:
+          type: string
+          nullable: true
+          description: Aircraft registration as matched from Mode-S identifier.
+        painted_as:
+          type: string
+          nullable: true
+          description: ICAO code of the carrier mapped from FR24's internal database.
+        operating_as:
+          type: string
+          nullable: true
+          description: ICAO code of the airline carrier as derived from flight callsign.
+        orig_iata:
+          type: string
+          nullable: true
+          example: ARN
+          description: Origin airport IATA code.
+        orig_icao:
+          type: string
+          nullable: true
+          example: ESSA
+          description: Origin airport ICAO code.
+        dest_iata:
+          type: string
+          nullable: true
+          example: ARN
+          description: Destination airport IATA code.
+        dest_icao:
+          type: string
+          nullable: true
+          example: ESSA
+          description: Destination airport ICAO code.
+        eta:
+          type: string
+          nullable: true
+          description: Estimated time of arrival (ISO 8601 date format).
+    FlightTracks:
+      type: object
+      example:
+        - fr24_id: "35f2ffd9"
+          tracks:
+            - timestamp: "2024-07-02T11:22:43Z"
+              lat: 62.97148
+              lon: -26.25193
+              alt: 33000
+              gspeed: 505
+              vspeed: 0
+              track: 105
+              squawk: "2566"
+              callsign: THY10
+              source: ADSB
+      properties:
+        fr24_id:
+            type: string
+            description: Unique identifier assigned by Flightradar24 to the flight leg.
+        tracks:
+          type: array
+          items:
+            type: object
+            properties:
+              timestamp:
+                type: string
+                format: date-time
+                description: Timestamp of the flight position expressed in UTC (ISO 8601 date format).
+              lat:
+                type: number
+                format: float
+                description: Latest latitude expressed in decimal degrees.
+              lon:
+                type: number
+                format: float
+                description: Latest longitude expressed in decimal degrees.
+              alt:
+                type: integer
+                description: Barometric pressure altitude above mean sea level (AMSL) reported at a standard atmospheric pressure (1013.25 hPa / 29.92 in. Hg.) expressed in feet.
+              gspeed:
+                type: integer
+                description: Speed relative to the ground expressed in knots.
+              vspeed:
+                type: integer
+                description: The rate at which the aircraft is ascending or descending in feet per minute.
+              track:
+                type: integer
+                description: True track (over ground) expressed in integer degrees as 0-360. Please note that 0 can in some cases mean unknown.
+              squawk:
+                type: string
+                description: 4 digit unique identifying code for ATC expressed in octal format.
+              callsign:
+                type: string
+                nullable: true
+                description: The last known callsign used by Air Traffic Control to denote a specific flight, as sent by the aircraft transponder. This callsign is consistent across all reported positions.
+              source:
+                type: string
+                description: Data source of the provided flight position.
+
+    FlightPositions:
+      type: object
+      example:
+        fr24_id: 321a0cc3
+        hex: 394C19
+        callsign: AFR1463
+        lat: -0.08806
+        lon: -168.07118
+        track: 219
+        alt: 38000
+        gspeed: 500
+        vspeed: 340
+        squawk: 6135
+        timestamp: "2023-11-08T10:10:00Z"
+        source: ADSB
+      properties:
+        fr24_id:
+          type: string
+          description: Unique identifier assigned by Flightradar24 to each flight leg.
+        hex:
+          type: string
+          description: 24 bit Mode-S identifier expressed in hexadecimal format.
+          nullable: true
+        callsign:
+          type: string
+          nullable: true
+          description: Callsign used by Air Traffic Control to denote a specific flight (as sent by aircraft transponder).
+        lat:
+          type: number
+          format: float
+          description: Latest latitude expressed in decimal degrees.
+        lon:
+          type: number
+          format: float
+          description: Latest longitude expressed in decimal degrees.
+        track:
+          type: integer
+          description: True track (over ground) expressed in integer degrees as 0-360. Please note that 0 can in some cases mean unknown.
+        alt:
+          type: integer
+          description: Barometric pressure altitude above mean sea level (AMSL) reported at a standard atmospheric pressure (1013.25 hPa / 29.92 in. Hg.) expressed in feet.
+        gspeed:
+          type: integer
+          description: Speed relative to the ground expressed in knots.
+        vspeed:
+          type: integer
+          description: The rate at which the aircraft is ascending or descending in feet per minute.
+        squawk:
+          type: string
+          description: 4 digit unique identifying code for ATC expressed in octal format.
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp of the flight position expressed in UTC (ISO 8601 date format).
+        source:
+          type: string
+          description: Data source of the provided flight position.
+    Airline:
+      title: Airline
+      type: object
+      properties:
+        name:
+          type: string
+          example: American Airlines
+          description: Name of the airline.
+        iata:
+          type: string
+          example: AA
+          nullable: true
+          description: Airline IATA code.
+        icao:
+          type: string
+          example: AAL
+          description: Airline ICAO code.
+    Airport:
+      type: object
+      description: Contains airport information.
+      example:
+        name: Stockholm Arlanda Airport
+        iata: ARN
+        icao: ESSA
+      properties:
+        name:
+          type: string
+          nullable: true
+          example: Stockholm Arlanda Airport
+          description: Name of the airport.
+        iata:
+          type: string
+          nullable: true
+          example: ARN
+          description: Airport IATA code.
+        icao:
+          type: string
+          example: ESSA
+          description: Airport ICAO code.
+    AirportDetailed:
+      type: object
+      description: Contains detailed airport information.
+      example:
+        name: Stockholm Arlanda Airport
+        iata: ARN
+        icao: ESSA
+        lon: 17.939816
+        lat: 59.653545
+        elevation: 137
+        country:
+          code: "SE"
+          name: "SWEDEN"
+        city: "Stockholm"
+        state: null
+        timezone:
+          name: "Europe/Stockholm"
+          offset: 7200
+
+      properties:
+        name:
+          type: string
+          example: Stockholm Arlanda Airport
+          description: Name of the airport.
+        iata:
+          type: string
+          nullable: true
+          example: ARN
+          description: Airport IATA code.
+        icao:
+          type: string
+          nullable: true
+          example: ESSA
+          description: Airport ICAO code.
+        lon:
+          type: number
+          format: float
+          description: Longitude expressed in decimal degrees.
+        lat:
+          type: number
+          format: float
+          description: Latitude expressed in decimal degrees.
+        elevation:
+          type: number
+          example: 150
+          description: Airport elevation in feet.
+        country:
+          $ref: '#/components/schemas/Country'
+        city:
+          type: string
+          example: 'Stockholm'
+          description: City of airport.
+        state:
+          type: string
+          nullable: true
+          description: The state where the airport is located. Only available for US, Canada, Brazil and Australia.
+        timezone:
+          $ref: '#/components/schemas/Timezone'
+    Timezone:
+      type: object
+      properties:
+        name:
+          type: string
+          description: "Name of the timezone."
+        offset:
+          type: integer
+          description: "Offset from UTC in seconds."
+      example:
+        name: Europe/Stockholm
+        offset: 7200
+    Country:
+      type: object
+      properties:
+        code:
+          type: string
+          description: "ISO 3166-1 alpha-2 code of the country."
+        name:
+          type: string
+          description: "Name of the country."
+      example:
+        code: SE
+        name: SWEDEN
+    UsageLogSummary:
+      type: object
+      properties:
+        endpoint:
+          type: string
+          description: "Endpoint of the API cal."
+        request_count:
+          type: integer
+          description: "Number of requests."
+        credits:
+          type: integer
+          description: "Number of credits used."
+      example:
+        endpoint: "live/flight-positions/full?{filters}"
+        request_count: 1
+        credits: 936
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: bearer
+  responses:
+    PaymentRequired:
+      description: Payment Required
+      content:
+        application/json:
+          schema:
+            type: object
+            example:
+              message: Forbidden
+              details: Credit limit reached. Please top up your account.
+            properties:
+              message:
+                type: string
+              details:
+                type: string
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            type: object
+            example:
+              message: Unauthenticated.
+            properties:
+              message:
+                type: string
+              details:
+                type: string
+    NotFound:
+      description: Not found
+      content:
+        application/json:
+          schema:
+            type: object
+            example:
+              message: Not found
+            properties:
+              message:
+                type: string
+              details:
+                type: string
+    UsageLogSummaryValidationError:
+      description: Validation error
+      content:
+        application/json:
+          schema:
+            type: object
+            example:
+              message: Validation failed
+              details: The selected period is invalid.
+            properties:
+              message:
+                type: string
+              details:
+                type: string
+
+
