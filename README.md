@@ -1,6 +1,4 @@
-Voici un modèle de README pour votre projet d'application mobile, que vous pourrez faire évoluer au fil du temps :
 
----
 
 # 📱 Application Mobile - Projet d'Alternance
 
