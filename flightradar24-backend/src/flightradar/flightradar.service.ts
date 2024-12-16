@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
-//todo: Add the following import statement - voir le client directement for call endpoint request 
-//increment websocket +1 
+//todo: Add the following import statement - voir le client directement for call endpoint request
+//increment websocket +1
 
 @Injectable()
 export class FlightradarService {

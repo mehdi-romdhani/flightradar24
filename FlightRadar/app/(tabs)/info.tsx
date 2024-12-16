@@ -17,7 +17,8 @@ const AirlineInfo = () => {
   const fetchAirlineInfo = async () => {
     setError('');
     try {
-      const response = await fetch(`http://localhost:3000/flights/airline/${icao}`); // Remplacez par votre IP locale
+      // Remplacez localhost par l'adresse IP de votre machine
+      const response = await fetch(`http://localhost:3000/airlines/${icao}/light`); // Remplacez par votre IP locale
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }

@@ -24,7 +24,7 @@ export const OpenAPI: OpenAPIConfig = {
     VERSION: '1',
     WITH_CREDENTIALS: false,
     CREDENTIALS: 'include',
-    TOKEN: undefined,
+    TOKEN: '9d8688fb-237e-4857-a26f-d54e5a082952|dx7BQLabOPUVZ1F2ulivyBglKo26zvBqRhMrThYN1e62cbdb',
     USERNAME: undefined,
     PASSWORD: undefined,
     HEADERS: undefined,
