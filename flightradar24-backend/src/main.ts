@@ -14,7 +14,8 @@ async function bootstrap() {
   
   app.enableCors(); // Active CORS
   // eslint-disable-next-line prettier/prettier
-  await app.listen(3000);
+  await app.listen(3000, '0.0.0.0');
+
   
 
   console.log('Application is running on: http://localhost:3000/api');
